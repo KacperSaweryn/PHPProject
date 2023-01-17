@@ -11,7 +11,7 @@ function otworz_polaczenie(){
 
 
     if(!mysqli_select_db($polaczenie, $baza)) {
-        // 1049 oznacza że baza nie istnieje
+
         if(mysqli_errno($polaczenie) == 1049) {
             utworz_baze();
             mysqli_select_db($polaczenie, $baza);
