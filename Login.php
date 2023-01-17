@@ -11,7 +11,7 @@ include('Functions.php');
 <hr><center>
     <?php
 otworz_polaczenie();
-echo "Przychodnia"
+
 ?>
 </center>
 </body>
