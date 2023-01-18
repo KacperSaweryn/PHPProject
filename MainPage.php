@@ -4,7 +4,7 @@ session_start();
 
 function checkCredentials()
 {
-    otworz_polaczenie();
+    openConnection();
     global $polaczenie;
     $login = $_GET['login'];
     $password = $_GET['password'];
@@ -52,7 +52,7 @@ function checkCredentials()
 function echoLoginProblem()
 {
     echo "<h1> Problem z zalogowaniem.</h1><input type=button value='WRÓĆ' onClick=window.location='Login.php'>";
-    zamknij_polaczenie();
+    closeConnection();
     session_destroy();
 }
 

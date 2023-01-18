@@ -1,7 +1,7 @@
 <?php
 include('Functions.php');
 session_start();
-otworz_polaczenie();
+openConnection();
 ?>
 <html>
 <head>
