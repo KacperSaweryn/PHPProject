@@ -1,6 +1,6 @@
 <?php
 
-function otworz_polaczenie(){
+function openConnection(){
     global $polaczenie;
     $serwer = "127.0.0.1";
     $uzytkownik = "root";
@@ -13,22 +13,22 @@ function otworz_polaczenie(){
     if(!mysqli_select_db($polaczenie, $baza)) {
 
         if(mysqli_errno($polaczenie) == 1049) {
-            utworz_baze();
+            createDb();
             mysqli_select_db($polaczenie, $baza);
-            utworz_tabele();
-            wstaw_dane_testowe();
+            createTable();
+            putTestData();
         }
         else echo("Połączenie z bazą danych $baza nieudane<br>");
     }
     mysqli_set_charset($polaczenie, "utf8");
 }
 
-function zamknij_polaczenie(){
+function closeConnection(){
     global $polaczenie;
     mysqli_close($polaczenie);
 }
 
-function utworz_baze() {
+function createDb() {
     $polaczenie = mysqli_connect("127.0.0.1", "root", "") or exit("Nieudane połączenie z serwerem");
     $baza = 'przychodnia';
 
@@ -37,7 +37,7 @@ function utworz_baze() {
     or exit("Błąd w zapytaniu tworzącym bazę");
 }
 
-function utworz_tabele() {
+function createTable() {
     global $polaczenie;
 
     $rozkaz = 	"create table typ " .
@@ -67,7 +67,7 @@ function utworz_tabele() {
     mysqli_query($polaczenie, $rozkaz) or exit("Błąd w zapytaniu: $rozkaz");
 }
 
-function wstaw_dane_testowe() {
+function putTestData() {
     global $polaczenie;
     mysqli_set_charset($polaczenie, "utf8");
     $rozkazy = array("insert into typ values(null, 'Admin');",
