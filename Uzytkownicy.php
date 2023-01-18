@@ -13,7 +13,7 @@ otworz_polaczenie();
 
 <hr>
 <center>
-    <form method=POST action='Login.php'">
+    <form method=GET action='Login.php'">
         UZYTKOWNICY
             <tr>
                 <td colspan=2>

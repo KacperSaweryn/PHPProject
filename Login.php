@@ -4,6 +4,7 @@ include('Functions.php');
 <html>
 <head>
     <meta charset="utf-8">
+    <title>Portal Pacjenta</title>
     <script>
         function valid() {
             if (document.forms[0].login.value === '' || document.forms[0].password.value === '') {
