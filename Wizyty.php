@@ -1,7 +1,11 @@
 <?php
 include('Functions.php');
 session_start();
+
+
 openConnection();
+
+
 ?>
 <html>
 <head>
