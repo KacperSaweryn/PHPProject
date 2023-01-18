@@ -18,7 +18,10 @@ include('Functions.php');
 
 <hr>
 <center>
-    <form method=POST action='MainPage.php' onsubmit="return valid()">
+    <div>
+        <h3>Portal Pacjenta</h3>
+    </div>
+    <form method=GET action='MainPage.php' onsubmit="return valid()">
         <table border=0>
             <tr>
                 <td>Login</td>
