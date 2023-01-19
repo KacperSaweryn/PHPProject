@@ -31,9 +31,11 @@ function checkCredentials()
         $_SESSION['userTyp'] = $row['typ_id'];
         switch ($_SESSION['userTyp']) {
             case "1":
-                echo "<div style='text-align:left'>
-                <input type=button value='Wizyty' onClick=window.location='Wizyty.php'>
-                <input type=button value='Uzytkownicy' onClick=window.location='Uzytkownicy.php'></div>";
+//                echo "<div style='text-align:left'>
+//                <input type=button value='Wizyty' onClick=window.location='Wizyty.php'>
+//                <input type=button value='Uzytkownicy' onClick=window.location='Uzytkownicy.php'></div>";
+                echo "<script> location.href='../pages/adminPanel.html'; </script>";
+                exit;
                 break;
             case "3":
             case "2":
