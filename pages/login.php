@@ -1,3 +1,6 @@
+<?php
+@session_destroy();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,20 +8,29 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Przychodnia - Login</title>
+    <script>
+        function valid() {
+            if (document.forms[0].login.value === '' || document.forms[0].password.value === '') {
+                alert('Uzupełnij wszystkie pola')
+                return false;
+            }
+            return true;
+        }
+    </script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
 </head>
 <body style="height: 100vh;">
     <div class="d-flex justify-content-center align-items-center h-100">
-    <form class="" style="width: 300px;">
+    <form method=GET class="" action='../functions/loginValidator.php' onsubmit="return valid()" style="width: 300px;">
         
         <div class="form-outline mb-4">
-          <input type="email" id="form2Example1" class="form-control" />
+          <input type="text" name="login" id="form2Example1" class="form-control" required/>
           <label class="form-label" for="form2Example1">Login</label>
         </div>
       
         
         <div class="form-outline mb-4">
-          <input type="password" id="form2Example2" class="form-control" />
+          <input type="password" name="password" id="form2Example2" class="form-control" required />
           <label class="form-label" for="form2Example2">Hasło</label>
         </div>
       
@@ -27,7 +39,7 @@
           
       
         
-        <button type="button" class="btn btn-primary btn-block mb-4" onclick="window.location.href='./doctorPanel.html'">Zaloguj</button>
+        <button type="submit" class="btn btn-primary btn-block mb-4" >Zaloguj</button>
       
         
         <div class="text-center">
