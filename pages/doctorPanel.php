@@ -1,3 +1,8 @@
+<?php
+include($_SERVER['DOCUMENT_ROOT'].'\functions\functions.php');
+session_start();
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -19,7 +24,7 @@
         <div class="navbar-brand">Przychodnia</div>
         <div id="ftco-nav">
           <ul class="navbar-nav ml-auto">
-            <li class="nav-item"><a href="#" class="nav-link">Wyloguj się <i class="bi bi-box-arrow-right"></i></a></li>
+            <li class="nav-item"><a href='/pages/login.php' class="nav-link">Wyloguj się <i class="bi bi-box-arrow-right"></i></a></li>
           </ul>
         </div>
       </div>

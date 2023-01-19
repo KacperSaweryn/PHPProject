@@ -13,9 +13,9 @@ function checkCredentials()
     $_SESSION['login'] = $login;
     $_SESSION['password'] = $password;
     $_SESSION['userId'] = '';
-    $_SESSION['userTyp'] = '';
-    $_SESSION['imie'] = '';
-    $_SESSION['nazwisko'] = '';
+    $_SESSION['userType'] = '';
+    $_SESSION['name'] = '';
+    $_SESSION['surname'] = '';
 
     $zapytanie = "select * from uzytkownik where login ='$login' and password ='$password'";
 
@@ -26,18 +26,18 @@ function checkCredentials()
     if ($count == 1) {
         $userId = $row['uzytkownik_id'];
         $_SESSION['userId'] = $userId;
-        $_SESSION['imie'] = $row['imie'];
-        $_SESSION['nazwisko'] = $row['nazwisko'];
-        $_SESSION['userTyp'] = $row['typ_id'];
-        switch ($_SESSION['userTyp']) {
+        $_SESSION['name'] = $row['imie'];
+        $_SESSION['surname'] = $row['nazwisko'];
+        $_SESSION['userType'] = $row['typ_id'];
+        switch ($_SESSION['userType']) {
             case "1":
-                echo "<script> location.href='/pages/adminPanel.html'; </script>";
+                echo "<script> location.href='../pages/adminPanel.php'; </script>";
                 exit;
             case "2":
-                echo "<script> location.href='/pages/doctorPanel.html'; </script>";
+                echo "<script> location.href='../pages/doctorPanel.php'; </script>";
                 exit;
             case "3":
-                echo "<script> location.href='/pages/patientPanel.html'; </script>";
+                echo "<script> location.href='../pages/patientPanel.php'; </script>";
                 exit;
             default:
                 echoLoginProblem();
@@ -53,14 +53,10 @@ function echoLoginProblem()
     echo "<script> alert('Niepoprawne dane')
           location.href='/pages/login.php';
           </script>";
-
-    //echo "<script> window.location.href='pages/login.php'; </script>";
-
     closeConnection();
     session_destroy();
     exit;
 }
-
 ?>
 
 <?php
