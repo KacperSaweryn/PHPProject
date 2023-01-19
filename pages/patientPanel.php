@@ -1,3 +1,8 @@
+<?php
+include($_SERVER['DOCUMENT_ROOT'].'\functions\functions.php');
+session_start();
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -5,7 +10,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel admina</title>
+    <title>Panel Pacjenta</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
@@ -25,10 +30,10 @@
                                 aria-selected="true">Wizyty</span>
                         </li>
                         <li class="nav-item menu-item" role="presentation">
-                            <span class="nav-link" id="user-tab" data-bs-toggle="tab" data-bs-target="#userList"
-                                role="tab" aria-controls="userList" aria-selected="false">Uzytkownicy</span>
+                            <span class="nav-link" data-bs-toggle="modal"
+                            data-bs-target="#add-visit-modal">Dodaj wizyte +</span>
                         </li>
-                        <li class="nav-item"><a href="#" class="nav-link">Wyloguj się <i
+                        <li class="nav-item"><a href='/pages/login.php' class="nav-link">Wyloguj się <i
                                     class="bi bi-box-arrow-right"></i></a></li>
                     </ul>
                 </div>
@@ -47,9 +52,7 @@
                             <h5 class="modal-title" id="visit-modalLabel">Edytuj wizyte</h5>
                         </div>
                         <div class="modal-body">
-                            <label for="patient">Pacjent</label>
-                            <input type="text" class="form-control" id="patient" placeholder="Pacjent"
-                                aria-label="Pacjent" aria-describedby="basic-addon1">
+                           
                             <label for="date">Data</label>
                             <input type="date" class="form-control" id="date">
 
@@ -63,28 +66,9 @@
                             <label for="time">Czas wizyty (w minutach)</label>
                             <input type="text" class="form-control" id="time" placeholder="Czas wizyty"
                                 aria-describedby="basic-addon1">
-                            <span>Status</span>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                    id="flexRadioDefault1">
-                                <label class="form-check-label" for="flexRadioDefault1">
-                                    Odbyła się
-                                </label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="radio" name="flexRadioDefault"
-                                    id="flexRadioDefault2" checked>
-                                <label class="form-check-label" for="flexRadioDefault2">
-                                    Odbędzie się
-                                </label>
-                            </div>
+                            
 
-                            <div class="form-floating">
-
-                                <textarea class="form-control" id="floatingTextarea2" style="height: 100px"></textarea>
-                                <label for="floatingTextarea2">Opis</label>
-
-                            </div>
+                           
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
@@ -97,28 +81,33 @@
         <!-- MODAL VISIT END -->
 
 
-        <!-- MODAL USER START -->
-        <form action="">
-            <div class="modal fade" id="user-modal" tabindex="-1" role="dialog" aria-labelledby="user-modalLabel"
+         <!-- MODAL ADD VISIT START -->
+         <form action="">
+            <div class="modal fade" id="add-visit-modal" tabindex="-1" role="dialog" aria-labelledby="add-visit-modalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="user-modalLabel">Edytuj uzytkownika</h5>
+                            <h5 class="modal-title" id="visit-modalLabel">Dodaj wizyte</h5>
                         </div>
                         <div class="modal-body">
-                            <label for="name">Imię</label>
-                            <input type="text" class="form-control" id="name" placeholder="Imię">
-                            <label for="surname">Nazwisko</label>
-                            <input type="text" class="form-control" id="surname" placeholder="Nazwisko">
+                           
+                            <label for="date">Data</label>
+                            <input type="date" class="form-control" id="date">
 
                             <select class="form-select">
-                                <option selected>--- Wybierz typ ---</option>
-                                <option value="doctor">Lekarz</option>
-                                <option value="patient">Pacjent</option>
-                                <option value="admin">Admin</option>
+                                <option selected>--- Wybierz godzine ---</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
                             </select>
 
+                            <label for="time">Czas wizyty (w minutach)</label>
+                            <input type="text" class="form-control" id="time" placeholder="Czas wizyty"
+                                aria-describedby="basic-addon1">
+                            
+
+                           
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
@@ -128,7 +117,7 @@
                 </div>
             </div>
         </form>
-        <!-- MODAL USER END -->
+        <!-- MODAL ADD VISIT END -->
 
 
 
@@ -167,36 +156,6 @@
                 </table>
             </div>
             <!-- VISITS END -->
-
-
-
-            <!-- USERS START -->
-            <div class="tab-pane fade" id="userList" role="tabpanel" aria-labelledby="user-tab" tabindex="0">
-                <h2>Lista uzytkowników</h2>
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th scope="col">Typ</th>
-                            <th scope="col">Imię</th>
-                            <th scope="col">Nazwisko</th>
-                            <th scope="col"></th>
-                            <th scope="col"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <th scope="row">Admin</th>
-                            <td>Adam</td>
-                            <td>Admin</td>
-                            <td><button type="button" class="btn btn-primary btn-block" data-bs-toggle="modal"
-                                    data-bs-target="#user-modal">Edytuj</button></td>
-                            <td><button type="button" class="btn btn-primary btn-block" data-bs-toggle="modal"
-                                    data-bs-target="#">Lista wizyt</button></td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-            <!-- USERS END -->
         </div>
     </div>
 
