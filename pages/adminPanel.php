@@ -1,5 +1,7 @@
 <?php
-include($_SERVER['DOCUMENT_ROOT'].'\functions\functions.php');
+// include($_SERVER['DOCUMENT_ROOT'].'\functions\functions.php');
+include('../functions/functions.php');
+include('../components/visitsList.php');
 session_start();
 
 ?>
@@ -18,6 +20,7 @@ session_start();
 </head>
 
 <body>
+   
 <section>
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
         <div class="container d-flex justify-content-between">
@@ -41,6 +44,7 @@ session_start();
     </nav>
 
 </section>
+
 <div class="container">
     <!-- MODAL VISIT START -->
     <form action="">
@@ -148,26 +152,15 @@ session_start();
                     <th scope="col">Data wizyty</th>
                     <th scope="col">Czas wizyty</th>
                     <th scope="col">Pacjent</th>
-                    <th scope="col">Status</th>
+                    <th scope="col">Lekarz</th>
+                    <th scope="col">Opis</th>
                     <th scope="col"></th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <th scope="row">21.12.2022</th>
-                    <td>0:30h</td>
-                    <td>Jan Kowalski</td>
-                    <td>Odbyła się</td>
-                    <td><button type="button" class="btn btn-primary btn-block" data-bs-toggle="modal"
-                                data-bs-target="#visit-modal">Edytuj</button></td>
-                </tr>
-                <tr>
-                    <th scope="row">21.12.2022</th>
-                    <td>0:30h</td>
-                    <td>Jan Kowalski</td>
-                    <td>Odbędzie się</td>
-                    <td><button type="button" class="btn btn-primary btn-block">Edytuj</button></td>
-                </tr>
+                <?php
+                    visitsList();
+                ?>
                 </tbody>
             </table>
         </div>
