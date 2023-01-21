@@ -12,7 +12,7 @@ if (count($data)){
     echo '<td>'.$item['imie_pacjenta'].' '.$item['nazwisko_pacjenta'].'</td>';
     echo '<td>'.$item['imie_lekarza'].' '.$item['nazwisko_lekarza'].'</td>';
     echo '<td>'.$item['opis'].'</td>';
-    echo '<td><button type="button" class="btn btn-primary btn-block" data-bs-toggle="modal" data-bs-target="#visit-modal">Edytuj</button></td>';
+    echo '<td><button type="button" class="btn btn-primary btn-block" data-bs-toggle="modal" data-bs-target="#visit-modal" data-id="'.$item['id'].'">Edytuj</button></td>';
     echo '</tr>';
    }
    
