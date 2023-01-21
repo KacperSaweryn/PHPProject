@@ -5,9 +5,9 @@ $userId = $_SESSION['userId'];
 
 function printUsers()
 {
-    global $polaczenie;
+    global $connection;
     $zapytanie = "select * from uzytkownik";
-    $wynik = mysqli_query($polaczenie, $zapytanie);
+    $wynik = mysqli_query($connection, $zapytanie);
 
     $naglowki = array("Typ", "Imię", "Nazwisko", "Login", "Hasło");
     print("<form method='POST'>");
@@ -23,7 +23,7 @@ function printUsers()
                 if ($p == 1) {
                     $typ = $pole;
                     $zapytanieTyp = "select typ from typ where typ_id = $typ";
-                    $wynikTyp = mysqli_query($polaczenie, $zapytanieTyp);
+                    $wynikTyp = mysqli_query($connection, $zapytanieTyp);
                     $wierszTyp = mysqli_fetch_array($wynikTyp, MYSQLI_ASSOC);
                     $typ = $wierszTyp['typ'];
                     print("<td>$typ</td>");
@@ -46,11 +46,11 @@ function printUsers()
 
 function editUsers($nr = -1)
 {
-    global $polaczenie;
+    global $connection;
 
     if ($nr != -1) {
         $rozkaz = "select typ_id, imie, nazwisko, login, password from uzytkownik where uzytkownik_id=$nr;";
-        $rekord = mysqli_query($polaczenie, $rozkaz) or exit("Błąd w zapytaniu: " . $rozkaz);
+        $rekord = mysqli_query($connection, $rozkaz) or exit("Błąd w zapytaniu: " . $rozkaz);
 
         $user = mysqli_fetch_row($rekord);
         $typ_id = $user[0];
@@ -101,7 +101,7 @@ function editUsers($nr = -1)
 
 function saveUser($nr)
 {
-    global $polaczenie;
+    global $connection;
     $typ_id = $_POST['typ_id'];
     $login = $_POST['login'];
     $password = $_POST['password'];
@@ -110,16 +110,16 @@ function saveUser($nr)
     if ($nr != -1)
         $rozkaz = "update uzytkownik set typ_id='$typ_id', imie='$imie', nazwisko='$nazwisko', login='$login', password='$password' where uzytkownik_id=$nr;";
     else $rozkaz = "insert into uzytkownik values(null,'$typ_id', '$imie', '$nazwisko','$login','$password');";
-    mysqli_query($polaczenie, $rozkaz) or exit("Błąd w zapytaniu: " . $rozkaz);
+    mysqli_query($connection, $rozkaz) or exit("Błąd w zapytaniu: " . $rozkaz);
 }
 
 
 function deleteUser($nr)
 {
-    global $polaczenie;
+    global $connection;
 
     $rozkaz = "delete from uzytkownik where uzytkownik_id=$nr;";
-    mysqli_query($polaczenie, $rozkaz) or exit("Błąd w zapytaniu: $rozkaz");
+    mysqli_query($connection, $rozkaz) or exit("Błąd w zapytaniu: $rozkaz");
 }
 
 ?>

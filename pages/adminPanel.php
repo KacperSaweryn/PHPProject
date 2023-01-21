@@ -2,6 +2,148 @@
 include($_SERVER['DOCUMENT_ROOT'].'\functions\functions.php');
 session_start();
 
+function printUsers(){
+
+    global $connection;
+    openConnection();
+    $query = "select * from uzytkownik";
+    $result = mysqli_query($connection, $query);
+    $headTitles = array("Typ", "Imię", "Nazwisko", "Login", "Hasło");
+    print("<form method='POST'>");
+    print("<table class='table table-striped'>
+                <thead>
+                <tr>");
+    foreach ($headTitles as $headTitle) print("<th scope='col'>$headTitle</th>");
+
+    print("<th><b><button type='button' name='button[-1]' class='btn btn-primary btn-block' data-bs-toggle='modal'
+                                data-bs-target='#user-modal' value='Dodaj'/>Dodaj</th>");
+    print("</tr>");
+    echo "
+                    
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  ";
+
+    while ($row = mysqli_fetch_row($result)) {
+        print("<tr>");
+        foreach ($row as $f => $field)
+            if ($f != 0) {
+                if ($f == 1) {
+                    $type = $field;
+                    $queryType = "select typ from typ where typ_id = $type";
+                    $resultType = mysqli_query($connection, $queryType);
+                    $rowType = mysqli_fetch_array($resultType, MYSQLI_ASSOC);
+                    $type = $rowType['typ'];
+                    print("<td>$type</td>");
+                } else if ($f == 5) {
+                    print("<td>***</td>");
+                } else {
+                    print("<td>$field</td>");
+                }
+            }
+        print("<td align='center' xmlns=\'http://www.w3.org/1999/html\'>
+                       <button type='button' name='button[$row[0]]'
+                       class='btn btn-primary btn-block' data-bs-toggle='modal'
+                       data-bs-target='#user-modal'>Edytuj</button>
+                       <button type='button' name='button[$row[0]]'
+                       class='btn btn-primary btn-block' data-bs-toggle='modal'
+                       data-bs-target='#user-modal'>Usuń</button></td>");
+    }
+    print("</table>");
+    print("</form>");
+    mysqli_free_result($result);
+
+
+}
+
+function saveUser($nr)
+{
+    global $connection;
+    $typeId = $_POST['typ_id'];
+    $login = $_POST['login'];
+    $password = $_POST['password'];
+    $name = $_POST['imie'];
+    $surname = $_POST['nazwisko'];
+    if ($nr != -1)
+        $order = "update uzytkownik set typ_id='$typeId', imie='$name', nazwisko='$surname', login='$login', password='$password' where uzytkownik_id=$nr;";
+    else $order = "insert into uzytkownik values(null,'$typeId', '$name', '$surname','$login','$password');";
+    mysqli_query($connection, $order) or exit("Błąd w zapytaniu: " . $order);
+}
+
+function deleteUser($nr)
+{
+    global $connection;
+
+    $order = "delete from uzytkownik where uzytkownik_id=$nr;";
+    mysqli_query($connection, $order) or exit("Błąd w zapytaniu: $order");
+}
+
+function editUsers($nr = -1)
+{
+    global $connection;
+
+    if ($nr != -1) {
+        $order = "select typ_id, imie, nazwisko, login, password from uzytkownik where uzytkownik_id=$nr;";
+        $record = mysqli_query($connection, $order) or exit("Błąd w zapytaniu: " . $order);
+
+
+        $user = mysqli_fetch_row($record);
+        $typeId = $user[0];
+        $name = $user[1];
+        $surname = $user[2];
+        $login = $user[3];
+        $password = $user[4];
+
+    } else {
+        $typeId = 1;
+        $name = '';
+        $surname = '';
+        $login = "";
+        $password = "";
+    }
+echo"
+    <form method='post' action=''>
+        <div class='modal fade' id='user-modal' tabindex='-1' role='dialog' aria-labelledby='user-modalLabel'
+             aria-hidden='true'>
+            <div class='modal-dialog' role='document'>
+                <div class='modal-content'>
+                    <div class='modal-header'>
+                        <h5 class='modal-title' id='user-modalLabel'>Edytuj uzytkownika</h5>
+                    </div>
+                    <div class='modal-body'>
+                    
+                        <label for='name'>Imię</label>
+                        <input type='text' class='form-control' id='name' value='$name' placeholder='Imię'>
+                        <label for='surname'>Nazwisko</label>
+                        <input type='text' class='form-control' id='surname' value='$surname' placeholder='Nazwisko'>
+                        <label for='login'>Login</label>
+                        <input type='text' class='form-control' id='login' value='$login' placeholder='Login'>
+                        <label for='surname'>Hasło</label>
+                        <input type='password' class='form-control' id='password' value='$password' placeholder='Hasło'>
+
+
+                        <select class='form-select'>
+                            <option selected>--- Wybierz typ ---</option>
+                            <option value='2'>Lekarz</option>
+                            <option value='3'>Pacjent</option>
+                            <option value='1'>Admin</option>
+                        </select>
+
+                    </div>
+                    <div class='modal-footer'>
+                        <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Zamknij</button>
+                        <button type='submit' name='button[$nr]' class='btn btn-primary'>Zapisz i zamknij</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    ";
+}
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -103,37 +245,37 @@ session_start();
 
 
     <!-- MODAL USER START -->
-    <form action="">
-        <div class="modal fade" id="user-modal" tabindex="-1" role="dialog" aria-labelledby="user-modalLabel"
-             aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="user-modalLabel">Edytuj uzytkownika</h5>
-                    </div>
-                    <div class="modal-body">
-                        <label for="name">Imię</label>
-                        <input type="text" class="form-control" id="name" placeholder="Imię">
-                        <label for="surname">Nazwisko</label>
-                        <input type="text" class="form-control" id="surname" placeholder="Nazwisko">
-
-
-                        <select class="form-select">
-                            <option selected>--- Wybierz typ ---</option>
-                            <option value="doctor">Lekarz</option>
-                            <option value="patient">Pacjent</option>
-                            <option value="admin">Admin</option>
-                        </select>
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>
-                        <button type="button" class="btn btn-primary">Zapisz i zamknij</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </form>
+<!--    <form method="post" action="">-->
+<!--        <div class="modal fade" id="user-modal" tabindex="-1" role="dialog" aria-labelledby="user-modalLabel"-->
+<!--             aria-hidden="true">-->
+<!--            <div class="modal-dialog" role="document">-->
+<!--                <div class="modal-content">-->
+<!--                    <div class="modal-header">-->
+<!--                        <h5 class="modal-title" id="user-modalLabel">Edytuj uzytkownika</h5>-->
+<!--                    </div>-->
+<!--                    <div class="modal-body">-->
+<!--                        <label for="name">Imię</label>-->
+<!--                        <input type="text" class="form-control" id="name" placeholder="Imię">-->
+<!--                        <label for="surname">Nazwisko</label>-->
+<!--                        <input type="text" class="form-control" id="surname" placeholder="Nazwisko">-->
+<!---->
+<!---->
+<!--                        <select class="form-select">-->
+<!--                            <option selected>--- Wybierz typ ---</option>-->
+<!--                            <option value="2">Lekarz</option>-->
+<!--                            <option value="3">Pacjent</option>-->
+<!--                            <option value="1">Admin</option>-->
+<!--                        </select>-->
+<!---->
+<!--                    </div>-->
+<!--                    <div class="modal-footer">-->
+<!--                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Zamknij</button>-->
+<!--                        <button type="button" class="btn btn-primary">Zapisz i zamknij</button>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </form>-->
     <!-- MODAL USER END -->
 
 
@@ -180,57 +322,7 @@ session_start();
         <div class="tab-pane fade" id="userList" role="tabpanel" aria-labelledby="user-tab" tabindex="0">
             <h2>Lista uzytkowników</h2>
             <?php
-            global $polaczenie;
-            openConnection();
-            $query = "select * from uzytkownik";
-            $result = mysqli_query($polaczenie, $query);
-            $headTitles = array("Typ", "Imię", "Nazwisko", "Login", "Hasło");
-            print("<form method='POST'>");
-            print("<table class='table table-striped'>
-                <thead>
-                <tr>");
-            foreach ($headTitles as $headTitle) print("<th scope='col'>$headTitle</th>");
-
-            print("<th><b><button type='button' name='button[-1]' class='btn btn-primary btn-block' data-bs-toggle='modal'
-                                data-bs-target='#user-modal'/>Dodaj</th>");
-            print("</tr>");
-            echo"
-                    
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                  ";
-
-            while ($row = mysqli_fetch_row($result)) {
-                print("<tr>");
-                foreach ($row as $f => $field)
-                    if ($f != 0) {
-                        if ($f == 1) {
-                            $type = $field;
-                            $queryType = "select typ from typ where typ_id = $type";
-                            $resultType = mysqli_query($polaczenie, $queryType);
-                            $rowType = mysqli_fetch_array($resultType, MYSQLI_ASSOC);
-                            $type = $rowType['typ'];
-                            print("<td>$type</td>");
-                        } else if ($f == 5) {
-                            print("<td>***</td>");
-                        } else {
-                            print("<td>$field</td>");
-                        }
-                    }
-                print("<td align='center' xmlns=\'http://www.w3.org/1999/html\'>
-                       <button type='button' name='przycisk[$row[0]]'
-                       class='btn btn-primary btn-block' data-bs-toggle='modal'
-                       data-bs-target='#user-modal'>Edytuj</button>
-                       <button type='button' name='przycisk[$row[0]]'
-                       class='btn btn-primary btn-block' data-bs-toggle='modal'
-                       data-bs-target='#user-modal'>Usuń</button></td>");
-            }
-            print("</table>");
-            print("</form>");
-            mysqli_free_result($result);
-
+            printUsers();
             ?>
 
         </div>
@@ -241,6 +333,31 @@ session_start();
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
         crossorigin="anonymous"></script>
+<?php
+$orderValue = '';
+if (isset($_POST['button'])) {
+    $nr = key($_POST['button']);
+    $orderValue = $_POST['button'][$nr];
+}
+openConnection();
+switch ($orderValue) {
+    case 'Edytuj':
+        editUsers($nr);
+        break;
+    case 'Dodaj':
+        editUsers();
+        break;
+    case 'Usuń':
+        deleteUser($nr);
+        break;
+    case 'Zapisz':
+        saveUser($nr);
+        break;
+
+}
+closeConnection();
+?>
+
 </body>
 
 </html>

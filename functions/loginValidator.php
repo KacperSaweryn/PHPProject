@@ -5,7 +5,7 @@ session_start();
 function checkCredentials()
 {
     openConnection();
-    global $polaczenie;
+    global $connection;
     $login = $_GET['login'];
     $password = $_GET['password'];
     $login = stripcslashes($login);
@@ -19,7 +19,7 @@ function checkCredentials()
 
     $zapytanie = "select * from uzytkownik where login ='$login' and password ='$password'";
 
-    $wynik = mysqli_query($polaczenie, $zapytanie);
+    $wynik = mysqli_query($connection, $zapytanie);
     $row = mysqli_fetch_array($wynik, MYSQLI_ASSOC);
     $count = mysqli_num_rows($wynik);
 
