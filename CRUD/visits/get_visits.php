@@ -1,13 +1,34 @@
 <?php
-function get_visits(){
-include("C:/xampp/htdocs/PHPProject/CRUD/init.php");
+function get_visits($user = "admin"){
+// include("C:/xampp/htdocs/PHPProject/CRUD/init.php");
 $server = init();
-$sql = "SELECT wizyta.id, data_wizyty, czas_wizyty, lekarz.imie AS imie_lekarza, lekarz.nazwisko AS nazwisko_lekarza, pacjent.imie AS imie_pacjenta, pacjent.nazwisko AS nazwisko_pacjenta, opis
-FROM wizyta
-JOIN uzytkownik AS lekarz ON wizyta.lekarz_id = lekarz.uzytkownik_id
-JOIN uzytkownik AS pacjent ON wizyta.pacjent_id = pacjent.uzytkownik_id";
 
-$res;
+$sql = "";
+$userId = $_SESSION['userId'];
+
+
+if($user === "admin"){
+    $sql = "SELECT wizyta.id, data_wizyty, czas_wizyty, lekarz.imie AS imie_lekarza, lekarz.nazwisko AS nazwisko_lekarza, pacjent.imie AS imie_pacjenta, pacjent.nazwisko AS nazwisko_pacjenta, opis
+    FROM wizyta
+    JOIN uzytkownik AS lekarz ON wizyta.lekarz_id = lekarz.uzytkownik_id
+    JOIN uzytkownik AS pacjent ON wizyta.pacjent_id = pacjent.uzytkownik_id";
+}
+
+if($user === "doctor"){
+    $sql = "SELECT wizyta.id, data_wizyty, czas_wizyty, lekarz.imie AS imie_lekarza, lekarz.nazwisko AS nazwisko_lekarza, pacjent.imie AS imie_pacjenta, pacjent.nazwisko AS nazwisko_pacjenta, opis
+    FROM wizyta
+    JOIN uzytkownik AS lekarz ON wizyta.lekarz_id = lekarz.uzytkownik_id
+    JOIN uzytkownik AS pacjent ON wizyta.pacjent_id = pacjent.uzytkownik_id WHERE wizyta.lekarz_id=".$userId;
+}
+
+if($user === "patient"){
+    $sql = "SELECT wizyta.id, data_wizyty, czas_wizyty, lekarz.imie AS imie_lekarza, lekarz.nazwisko AS nazwisko_lekarza, pacjent.imie AS imie_pacjenta, pacjent.nazwisko AS nazwisko_pacjenta, opis
+    FROM wizyta
+    JOIN uzytkownik AS lekarz ON wizyta.lekarz_id = lekarz.uzytkownik_id
+    JOIN uzytkownik AS pacjent ON wizyta.pacjent_id = pacjent.uzytkownik_id WHERE wizyta.pacjent_id=".$userId;
+}
+
+$res = null;
 if($server){
     try {
         $res = mysqli_query($server, $sql);

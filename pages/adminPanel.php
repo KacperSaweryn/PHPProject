@@ -2,6 +2,8 @@
 // include($_SERVER['DOCUMENT_ROOT'].'\functions\functions.php');
 include('../functions/functions.php');
 include('../components/visitsList.php');
+include('../components/usersList.php');
+include("C:/xampp/htdocs/PHPProject/CRUD/init.php");
 session_start();
 
 ?>
@@ -172,59 +174,24 @@ session_start();
         <!-- USERS START -->
         <div class="tab-pane fade" id="userList" role="tabpanel" aria-labelledby="user-tab" tabindex="0">
             <h2>Lista uzytkowników</h2>
-            <?php
-            global $polaczenie;
-            openConnection();
-            $query = "select * from uzytkownik";
-            $result = mysqli_query($polaczenie, $query);
-            $headTitles = array("Typ", "Imię", "Nazwisko", "Login", "Hasło");
-            print("<form method='POST'>");
-            print("<table class='table table-striped'>
+            <table class="table table-striped">
                 <thead>
-                <tr>");
-            foreach ($headTitles as $headTitle) print("<th scope='col'>$headTitle</th>");
-
-            print("<th><b><button type='button' name='button[-1]' class='btn btn-primary btn-block' data-bs-toggle='modal'
-                                data-bs-target='#user-modal'/>Dodaj</th>");
-            print("</tr>");
-            echo"
-                    
+                <tr>
+                    <th scope="col">Typ</th>
+                    <th scope="col">Imię</th>
+                    <th scope="col">Nazwisko</th>
+                    <th scope="col"></th>
+                    <th scope="col"></th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                  ";
-
-            while ($row = mysqli_fetch_row($result)) {
-                print("<tr>");
-                foreach ($row as $f => $field)
-                    if ($f != 0) {
-                        if ($f == 1) {
-                            $type = $field;
-                            $queryType = "select typ from typ where typ_id = $type";
-                            $resultType = mysqli_query($polaczenie, $queryType);
-                            $rowType = mysqli_fetch_array($resultType, MYSQLI_ASSOC);
-                            $type = $rowType['typ'];
-                            print("<td>$type</td>");
-                        } else if ($f == 5) {
-                            print("<td>***</td>");
-                        } else {
-                            print("<td>$field</td>");
-                        }
-                    }
-                print("<td align='center' xmlns=\'http://www.w3.org/1999/html\'>
-                       <button type='button' name='przycisk[$row[0]]'
-                       class='btn btn-primary btn-block' data-bs-toggle='modal'
-                       data-bs-target='#user-modal'>Edytuj</button>
-                       <button type='button' name='przycisk[$row[0]]'
-                       class='btn btn-primary btn-block' data-bs-toggle='modal'
-                       data-bs-target='#user-modal'>Usuń</button></td>");
-            }
-            print("</table>");
-            print("</form>");
-            mysqli_free_result($result);
-
-            ?>
+               
+                    <?php
+                        usersList();
+                    ?>
+                
+                </tbody>
+            </table>
 
         </div>
         <!-- USERS END -->

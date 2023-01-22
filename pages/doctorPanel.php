@@ -1,5 +1,6 @@
 <?php
-include($_SERVER['DOCUMENT_ROOT'].'\functions\functions.php');
+include('../components/visitsList.php');
+include("C:/xampp/htdocs/PHPProject/CRUD/init.php");
 session_start();
 
 ?>
@@ -71,21 +72,9 @@ session_start();
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <th scope="row">21.12.2022</th>
-          <td>0:30h</td>
-          <td>Jan Kowalski</td>
-          <td>Odbyła się</td>
-          <td><button type="button" class="btn btn-primary btn-block" data-bs-toggle="modal"
-              data-bs-target="#exampleModal">Dodaj opis</button></td>
-        </tr>
-        <tr>
-          <th scope="row">21.12.2022</th>
-          <td>0:30h</td>
-          <td>Jan Kowalski</td>
-          <td>Odbędzie się</td>
-          <td><button type="button" class="btn btn-primary btn-block">Dodaj opis</button></td>
-        </tr>
+       <?php
+        visitsList("doctor");
+       ?>
       </tbody>
     </table>
   </div>
