@@ -1,12 +1,13 @@
 <?php
 include('../functions/functions.php');
+include('../functions/welcome.php');
 session_start();
 $userId = $_SESSION['userId'];
 
 function printUsers()
 {
     echo "
-            <h2>Lista uzytkowników</h2>";
+            <h2>Lista użytkowników</h2>";
     global $connection;
     openConnection();
     $query = "select * from uzytkownik";
@@ -21,8 +22,7 @@ function printUsers()
     print("<th><b><input type='submit' name='button[-1]' class='btn btn-primary btn-block' value='Dodaj'
                                 /></th>");
     print("</tr>");
-    echo"
-                    
+    echo "
                 </tr>
                 </thead>
                 <tbody>
@@ -64,9 +64,9 @@ function editUsers($nr = -1)
 {
     global $connection;
     if ($nr != -1) {
-     $order = "select typ_id, imie, nazwisko, login, password from uzytkownik where uzytkownik_id=$nr;";
+        $order = "select typ_id, imie, nazwisko, login, password from uzytkownik where uzytkownik_id=$nr;";
         $record = mysqli_query($connection, $order) or exit("Błąd w zapytaniu: " . $order);
-
+        $types = ['Admin' => 1, 'Lekarz' => 2, 'Pacjent' => 3];
 
         $user = mysqli_fetch_row($record);
         $typeId = $user[0];
@@ -76,19 +76,23 @@ function editUsers($nr = -1)
         $password = $user[4];
 
     } else {
-        $typeId = 1;
         $name = '';
         $surname = '';
         $login = "";
         $password = "";
     }
-
     echo " 
 	<form method=POST action=''> 
 	<table border=0>
 	<tr>
 	<label for='typeId'>Typ</label>
-    <input type='text' value='$typeId' class='form-control' id='typeId' name='typeId' placeholder='Typ'>
+    
+    <select class='form-select' name='typeId'>
+                                <option selected value='1'>Admin</option>
+                                <option value='2'>Lekarz</option>
+                                <option value='3'>Pacjent</option>
+    </select>
+   
 	</tr>
 	<tr>
 	<label for='name'>Imię</label>
@@ -160,8 +164,10 @@ function deleteUser($nr)
             <div class="navbar-brand">Przychodnia</div>
             <div id="ftco-nav">
                 <ul class="navbar-nav" id="myTab" role="tablist">
-                    <li class="nav-item menu-item" role="presentation"><a href='../pages/visitPanelMain.php' class="nav-link">Wizyty </a></li>
-                    <li class="nav-item menu-item" role="presentation"><a href='../pages/usersPanel.php' class="nav-link">Użytkownicy </a></li>
+                    <li class="nav-item menu-item" role="presentation"><a href='../pages/visitPanelMain.php'
+                                                                          class="nav-link">Wizyty </a></li>
+                    <li class="nav-item menu-item" role="presentation"><a href='../pages/usersPanel.php'
+                                                                          class="nav-link">Użytkownicy </a></li>
 
                     </li>
                     <li class="nav-item"><a href='../functions/logout.php' class="nav-link">Wyloguj się <i
@@ -172,33 +178,34 @@ function deleteUser($nr)
     </nav>
 
 </section>
-    <?php
+<?php
 
-    $orderValue = '';
-    if (isset($_POST['button'])) {
-        $nr = key($_POST['button']);
-        $orderValue = $_POST['button'][$nr];
-    }
-    openConnection();
-    switch ($orderValue) {
-        case 'Edytuj':
-            editUsers($nr);
-            break;
-        case 'Dodaj':
-            editUsers();
-            break;
-        case 'Usuń':
-            deleteUser($nr);
-            break;
-        case 'Zapisz':
-            saveUser($nr);
-            break;
+$orderValue = '';
+if (isset($_POST['button'])) {
+    $nr = key($_POST['button']);
+    $orderValue = $_POST['button'][$nr];
+}
+openConnection();
+switch ($orderValue) {
+    case 'Edytuj':
+        editUsers($nr);
+        break;
+    case 'Dodaj':
+        editUsers();
+        break;
+    case 'Usuń':
+        deleteUser($nr);
+        break;
+    case 'Zapisz':
+        saveUser($nr);
+        break;
 
-
-    }
-    printUsers();
-    closeConnection();
-    ?>
-
+}
+printUsers();
+closeConnection();
+?>
+<br>
+<br>
+<?= welcome($userId) ?>
 </body>
 </html>

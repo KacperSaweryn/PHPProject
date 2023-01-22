@@ -75,64 +75,35 @@ function printVisits()
 
 }
 
-function editVisit($nr = -1)
+function editVisit($nr)
 {
     global $connection;
-    if ($nr != -1) {
-        $order = "select data_wizyty, czas_wizyty, lekarz_id, pacjent_id, opis from wizyta where id=$nr";
-        $record = mysqli_query($connection, $order) or exit("Błąd w zapytaniu: " . $order);
-        $visit = mysqli_fetch_row($record);
-        $visitDate = $visit[0];
-        $visitTime = $visit[1];
-        $doctorId = $visit[2];
-        $patientId = $visit[3];
-        $description = $visit[4];
 
-    }
+    $order = "select opis from wizyta where id=$nr";
+    $record = mysqli_query($connection, $order) or exit("Błąd w zapytaniu: " . $order);
+    $visit = mysqli_fetch_row($record);
+    $description = $visit[0];
 
     echo " 
 	<form method=POST action=''> 
 	<table border=0>
-	<tr>
-	<label for='doctor'>Lekarz</label>
-    <input type='text' value='$doctorId' class='form-control' id='doctorId' name='doctorId' placeholder='Lekarz' disabled>
-	</tr>
-	<tr>
-	<label for='patient'>Pacjent</label>
-    <input type='text' value='$patientId' class='form-control' id='patient' name='patientId' placeholder='Pacjent' disabled>
-	</tr>
-	<tr>
-	<label for='visitDate'>Data</label>
-    <input type='date' value='$visitDate' class='form-control' id='visitDate' name='visitDate' placeholder='Data' disabled>
-	</tr>
-	<tr>
-	<label for='visitTime'>Godzina</label>
-    <input type='time' value='$visitTime' class='form-control' id='visitTime' name='visitTime' placeholder='Godzina' disabled>
-	</tr>
-	<tr>
-	<tr>
+	
 	<label for='opis'>Opis</label>
-    <input type='text' value='$description' class='form-control' id='opis' name='opis' placeholder='Opis' required>
+    <input type='text' value='$description' class='form-control' id='opis' name='description' placeholder='Opis' required>
 	</tr>
 	<tr>
 	<td colspan=3>
 	<input type=submit name='button[$nr]' value='Zapisz' style='width:200px'></td>
 	</tr>
 	</table></form>";
+
 }
 
 function saveVisit($nr)
 {
     global $connection;
-
-    $visitDate = $_POST['visitDate'];
-    $visitTime = $_POST['visitTime'];
-    $doctorId = $_POST['doctorId'];
-    $patientId = $_POST['patientId'];
-    $description = $_POST['opis'];
-    if ($nr != -1)
-        $order = "update wizyta set data_wizyty='$visitDate', czas_wizyty='$visitTime', lekarz_id='$doctorId', pacjent_id='$patientId', opis='$opis' where id=$nr;";
-    else $order = "insert into wizyta values(null,'$visitDate', '$visitTime', '$doctorId','$patientId','$description');";
+    $description = $_POST['description'];
+    $order = "update wizyta set opis='$description' where id=$nr;";
     mysqli_query($connection, $order) or exit("Błąd w zapytaniu: " . $order);
 }
 
@@ -157,7 +128,7 @@ function saveVisit($nr)
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
         <div class="container d-flex justify-content-between">
             <div class="navbar-brand">Przychodnia</div>
-            <div class="navbar-brand"><?= welcome($userId)?></div>
+
             <div id="ftco-nav">
                 <ul class="navbar-nav" id="myTab" role="tablist">
 
@@ -170,14 +141,13 @@ function saveVisit($nr)
 
 </section>
 
-<div class="navbar-brand"><?= welcome($userId)?></div>
+
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
         crossorigin="anonymous"></script>
 
 <?php
-welcome($userId);
 $orderValue = '';
 if (isset($_POST['button'])) {
     $nr = key($_POST['button']);
@@ -196,6 +166,9 @@ switch ($orderValue) {
 printVisits();
 closeConnection();
 ?>
+<br>
+<br>
+<?= welcome($userId) ?>
 </body>
 
 </html>

@@ -80,18 +80,20 @@ function printVisits()
 function editVisit($nr = -1)
 {
     global $connection;
+    $doctorsOrder = "select imie, nazwisko, uzytkownik_id from uzytkownik where typ_id = 2";
+    $doctorRecord = mysqli_query($connection, $doctorsOrder) or exit("Błąd w zapytaniu: " . $doctorsOrder);
+    $patientsOrder = "select imie, nazwisko, uzytkownik_id from uzytkownik where typ_id = 3";
+    $patientRecord = mysqli_query($connection, $patientsOrder) or exit("Błąd w zapytaniu: " . $patientsOrder);
     if ($nr != -1) {
-        $order = "select data_wizyty, czas_wizyty, lekarz_id, pacjent_id, opis from wizyta where id=$nr";
-
+        $order = "select data_wizyty, czas_wizyty, lekarz_id, pacjent_id, opis  from wizyta where id=$nr";
         $record = mysqli_query($connection, $order) or exit("Błąd w zapytaniu: " . $order);
-
-
         $visit = mysqli_fetch_row($record);
         $visitDate = $visit[0];
         $visitTime = $visit[1];
         $doctorId = $visit[2];
         $patientId = $visit[3];
         $description = $visit[4];
+
 
     } else {
         $visitDate = "";
@@ -100,18 +102,24 @@ function editVisit($nr = -1)
         $patientId = null;
         $description = "";
     }
-
-
     echo " 
 	<form method=POST action=''> 
 	<table border=0>
 	<tr>
 	<label for='doctor'>Lekarz</label>
-    <input type='text' value='$doctorId' class='form-control' id='doctorId' name='doctorId' placeholder='Lekarz' required>
+    <select class='form-select' name='doctorId'>";
+     while($doctors = mysqli_fetch_array($doctorRecord)){
+            echo"<option value='".$doctors['uzytkownik_id']."'>".$doctors['imie']." ".$doctors['nazwisko']."</option>";
+        }
+        echo"
 	</tr>
 	<tr>
 	<label for='patient'>Pacjent</label>
-    <input type='text' value='$patientId' class='form-control' id='patient' name='patientId' placeholder='Pacjent' >
+   <select class='form-select' name='patientId'>";
+    while($patients = mysqli_fetch_array($patientRecord)){
+        echo"<option value='".$patients['uzytkownik_id']."'>".$patients['imie']." ".$patients['nazwisko']."</option>";
+    }
+    echo"
 	</tr>
 	<tr>
 	<label for='visitDate'>Data</label>
@@ -201,7 +209,6 @@ function deleteVisit($nr)
         crossorigin="anonymous"></script>
 
 <?php
-welcome($userId);
 $orderValue = '';
 if (isset($_POST['button'])) {
     $nr = key($_POST['button']);
@@ -226,6 +233,9 @@ switch ($orderValue) {
 printVisits();
 closeConnection();
 ?>
+<br>
+<br>
+<?= welcome($userId) ?>
 </body>
 
 </html>
