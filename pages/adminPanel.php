@@ -4,6 +4,7 @@ include('../functions/functions.php');
 include('../components/visitsList.php');
 session_start();
 
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -56,22 +57,27 @@ session_start();
                         <h5 class="modal-title" id="visit-modalLabel">Edytuj wizyte</h5>
                     </div>
                     <div class="modal-body">
+                        <label for="doctor">Lekarz</label>
+                        <input type="text" class="form-control" id="doctor" name="visitDoctor" placeholder="Pacjent"
+                               aria-label="Lekarz" aria-describedby="basic-addon1">
                         <label for="patient">Pacjent</label>
-                        <input type="text" class="form-control" id="patient" placeholder="Pacjent"
+                        <input type="text" class="form-control" id="patient" name="visitPatient" placeholder="Pacjent"
                                aria-label="Pacjent" aria-describedby="basic-addon1">
                         <label for="date">Data</label>
-                        <input type="date" class="form-control" id="date">
+                        <input type="date" class="form-control" name="visitDate" id="date">
+                        <label for="time">Czas</label>
+                        <input type="time" class="form-control" name="visitTime" id="time">
 
-                        <select class="form-select">
-                            <option selected>--- Wybierz godzine ---</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                        </select>
-
-                        <label for="time">Czas wizyty (w minutach)</label>
-                        <input type="text" class="form-control" id="time" placeholder="Czas wizyty"
-                               aria-describedby="basic-addon1">
+<!--                        <select class="form-select">-->
+<!--                            <option selected>--- Wybierz godzine ---</option>-->
+<!--                            <option value="1">One</option>-->
+<!--                            <option value="2">Two</option>-->
+<!--                            <option value="3">Three</option>-->
+<!--                        </select>-->
+<!---->
+<!--                        <label for="time">Czas wizyty (w minutach)</label>-->
+<!--                        <input type="text" class="form-control" id="time" placeholder="Czas wizyty"-->
+<!--                               aria-describedby="basic-addon1">-->
                         <span>Status</span>
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="flexRadioDefault"
@@ -90,7 +96,7 @@ session_start();
 
                         <div class="form-floating">
 
-                            <textarea class="form-control" id="floatingTextarea2" style="height: 100px"></textarea>
+                            <textarea class="form-control" id="floatingTextarea2" name="visitDescription" style="height: 100px"></textarea>
                             <label for="floatingTextarea2">Opis</label>
 
                         </div>
@@ -144,9 +150,12 @@ session_start();
 
     <div class="tab-content" id="myTabContent">
         <!-- VISITS START -->
+
         <div class="tab-pane fade show active" id="visitsList" role="tabpanel" aria-labelledby="visits-tab"
              tabindex="0">
+
             <h2>Lista wizyt</h2>
+
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -156,6 +165,8 @@ session_start();
                     <th scope="col">Lekarz</th>
                     <th scope="col">Opis</th>
                     <th scope="col"></th>
+                    <th><b><button type='button' name='button[-1]' class='btn btn-primary btn-block' data-bs-toggle='modal'
+                                          data-bs-target='#visit-modal' value='Dodaj'/>Dodaj</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -164,6 +175,7 @@ session_start();
                 ?>
                 </tbody>
             </table>
+
         </div>
         <!-- VISITS END -->
 
@@ -234,6 +246,31 @@ session_start();
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
         crossorigin="anonymous"></script>
+
+<?php
+$orderValue = '';
+if (isset($_POST['button'])) {
+    $nr = key($_POST['button']);
+    $orderValue = $_POST['button'][$nr];
+}
+openConnection();
+switch ($orderValue) {
+    case 'Edytuj':
+        editVisit($nr);
+        break;
+    case 'Dodaj':
+        editVisit();
+        break;
+    case 'Usuń':
+        deleteVisit($nr);
+        break;
+    case 'Zapisz':
+        saveVisit($nr);
+        break;
+
+}
+closeConnection();
+?>
 </body>
 
 </html>

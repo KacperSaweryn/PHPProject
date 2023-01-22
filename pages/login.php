@@ -22,7 +22,7 @@
 </head>
 <body style="height: 100vh;">
     <div class="d-flex justify-content-center align-items-center h-100">
-    <form method=GET class="" action='../functions/loginValidator.php' onsubmit="return valid()" style="width: 300px;">
+    <form method=GET class="" action='../functions/loginValidatorNew.php' onsubmit="return valid()" style="width: 300px;">
         
         <div class="form-outline mb-4">
           <input type="text" name="login" id="form2Example1" class="form-control" required/>

@@ -31,13 +31,13 @@ function checkCredentials()
         $_SESSION['userType'] = $row['typ_id'];
         switch ($_SESSION['userType']) {
             case "1":
-                echo "<script> location.href='../pages/adminPanel.php'; </script>";
+                echo "<script> location.href='../pages/adminPanelMain.php'; </script>";
                 exit;
             case "2":
-                echo "<script> location.href='../pages/doctorPanel.php'; </script>";
+                echo "<script> location.href='../pages/doctorPanelMain.php'; </script>";
                 exit;
             case "3":
-                echo "<script> location.href='../pages/patientPanel.php'; </script>";
+                echo "<script> location.href='../pages/patientPanelMain.php'; </script>";
                 exit;
             default:
                 echoLoginProblem();
@@ -51,7 +51,7 @@ function checkCredentials()
 function echoLoginProblem()
 {
     echo "<script> alert('Niepoprawne dane')
-          location.href='/pages/login.php';
+          location.href='../pages/login.php';
           </script>";
     closeConnection();
     session_destroy();

@@ -1,6 +1,6 @@
 <?php
 function get_visits(){
-include("C:/xampp/htdocs/PHPProject/CRUD/init.php");
+include("C:/xampp/htdocs/Zajecia/PHPProject/CRUD/init.php");
 $server = init();
 $sql = "SELECT wizyta.id, data_wizyty, czas_wizyty, lekarz.imie AS imie_lekarza, lekarz.nazwisko AS nazwisko_lekarza, pacjent.imie AS imie_pacjenta, pacjent.nazwisko AS nazwisko_pacjenta, opis
 FROM wizyta
