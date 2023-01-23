@@ -1,98 +1,174 @@
 <?php
-include($_SERVER['DOCUMENT_ROOT'].'\functions\functions.php');
+include('../functions/functions.php');
+include('../components/visitsList.php');
+include('../functions/welcome.php');
 session_start();
+$userId = $_SESSION['userId'];
+
+function printVisits()
+{
+    echo "
+            <h2>Lista wizyt</h2>";
+    global $connection;
+    global $userId;
+    openConnection();
+
+    $query = "select * from wizyta WHERE lekarz_id = $userId";
+    $result = mysqli_query($connection, $query);
+    $headTitles = array("Data wizyty", "Godzina wizyty", "Lekarz", "Pacjent", "Opis");
+    print("<form method='POST'>");
+    print("<table class='table table-striped'>
+                <thead>
+                <tr>");
+    foreach ($headTitles as $headTitle) print("<th scope='col'>$headTitle</th>");
+
+    print("<th></th>");
+    print("</tr>");
+    echo "
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  ";
+
+    while ($row = mysqli_fetch_row($result)) {
+        print("<tr>");
+        foreach ($row as $f => $field)
+            if ($f != 0) {
+                if ($f == 3) {
+                    $doctor = "";
+                    $doctorId = $field;
+                    if ($field != null) {
+                        $queryDoctorId = "select imie, nazwisko from uzytkownik where uzytkownik_id = $doctorId";
+                        $resultDoctor = mysqli_query($connection, $queryDoctorId);
+                        $rowDoctor = mysqli_fetch_array($resultDoctor, MYSQLI_ASSOC);
+                        $doctorName = $rowDoctor['imie'];
+                        $doctorSurname = $rowDoctor['nazwisko'];
+                        $doctor = $doctorName . ' ' . $doctorSurname;
+                    }
+                    print("<td>$doctor</td>");
+                } else if ($f == 4) {
+                    $patient = "";
+                    if ($field != null) {
+                        $patientId = $field;
+                        $queryPatientId = "select imie, nazwisko from uzytkownik where uzytkownik_id = $patientId";
+                        $resultPatient = mysqli_query($connection, $queryPatientId);
+                        $rowPatient = mysqli_fetch_array($resultPatient, MYSQLI_ASSOC);
+                        $patientName = $rowPatient['imie'];
+                        $patientSurname = $rowPatient['nazwisko'];
+                        $patient = $patientName . ' ' . $patientSurname;
+                    }
+                    print("<td>$patient</td>");
+                } else {
+                    print("<td>$field</td>");
+                }
+            }
+        print("<td align='center' xmlns=\'http://www.w3.org/1999/html\'>
+                       <input type='submit' name='button[$row[0]]'
+                       class='btn btn-primary btn-block' value='Edytuj'
+                       />
+                       </td>");
+    }
+    print("</table>");
+    print("</form>");
+    mysqli_free_result($result);
+
+}
+
+function editVisit($nr)
+{
+    global $connection;
+
+    $order = "select opis from wizyta where id=$nr";
+    $record = mysqli_query($connection, $order) or exit("Błąd w zapytaniu: " . $order);
+    $visit = mysqli_fetch_row($record);
+    $description = $visit[0];
+
+    echo " 
+	<form method=POST action=''> 
+	<table border=0>
+	
+	<label for='opis'>Opis</label>
+    <input type='text' value='$description' class='form-control' id='opis' name='description' placeholder='Opis' required>
+	</tr>
+	<tr>
+	<td colspan=3>
+	<input type=submit name='button[$nr]' value='Zapisz' style='width:200px'></td>
+	</tr>
+	</table></form>";
+
+}
+
+function saveVisit($nr)
+{
+    global $connection;
+    $description = $_POST['description'];
+    $order = "update wizyta set opis='$description' where id=$nr;";
+    mysqli_query($connection, $order) or exit("Błąd w zapytaniu: " . $order);
+}
 
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Panel Lekarza</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel lekarza</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
-  <link href="../styles/styles.css" rel="stylesheet">
+    <link href="../styles/styles.css" rel="stylesheet">
 </head>
 
 <body>
-  <section>
+
+<section>
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
-      <div class="container d-flex justify-content-between">
-        <div class="navbar-brand">Przychodnia</div>
-        <div id="ftco-nav">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item"><a href='/pages/login.php' class="nav-link">Wyloguj się <i class="bi bi-box-arrow-right"></i></a></li>
-          </ul>
+        <div class="container d-flex justify-content-between">
+            <div class="navbar-brand">Przychodnia</div>
+
+            <div id="ftco-nav">
+                <ul class="navbar-nav" id="myTab" role="tablist">
+
+                    <li class="nav-item"><a href='../functions/logout.php' class="nav-link">Wyloguj się <i
+                                    class="bi bi-box-arrow-right"></i></a></li>
+                </ul>
+            </div>
         </div>
-      </div>
     </nav>
 
-  </section>
-  <div class="container">
-    <!-- MODAL START -->
-    <form action="">
-      <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Dodaj Opis</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <div class="form-floating">
-                <textarea class="form-control" id="floatingTextarea2" style="height: 100px"></textarea>
-                <label for="floatingTextarea2">Opis</label>
-              </div>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
-              <button type="button" class="btn btn-primary">Zapisz i zakończ wizyte</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </form>
-    <!-- MODAL END -->
-    <h2>Lista wizyt</h2>
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th scope="col">Data wizyty</th>
-          <th scope="col">Czas wizyty</th>
-          <th scope="col">Pacjent</th>
-          <th scope="col">Status</th>
-          <th scope="col"></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th scope="row">21.12.2022</th>
-          <td>0:30h</td>
-          <td>Jan Kowalski</td>
-          <td>Odbyła się</td>
-          <td><button type="button" class="btn btn-primary btn-block" data-bs-toggle="modal"
-              data-bs-target="#exampleModal">Dodaj opis</button></td>
-        </tr>
-        <tr>
-          <th scope="row">21.12.2022</th>
-          <td>0:30h</td>
-          <td>Jan Kowalski</td>
-          <td>Odbędzie się</td>
-          <td><button type="button" class="btn btn-primary btn-block">Dodaj opis</button></td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+</section>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
-    crossorigin="anonymous"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
+
+<?php
+$orderValue = '';
+if (isset($_POST['button'])) {
+    $nr = key($_POST['button']);
+    $orderValue = $_POST['button'][$nr];
+}
+openConnection();
+switch ($orderValue) {
+    case 'Edytuj':
+        editVisit($nr);
+        break;
+    case 'Zapisz':
+        saveVisit($nr);
+        break;
+
+}
+printVisits();
+closeConnection();
+?>
+<br>
+<br>
+<?= welcome($userId) ?>
 </body>
 
 </html>

@@ -188,7 +188,7 @@ function deleteVisit($nr)
             <div class="navbar-brand">Przychodnia</div>
             <div id="ftco-nav">
                 <ul class="navbar-nav" id="myTab" role="tablist">
-                    <li class="nav-item menu-item" role="presentation"><a href='../pages/visitPanelMain.php'
+                    <li class="nav-item menu-item" role="presentation"><a href='visitPanel.php'
                                                                           class="nav-link">Wizyty </a></li>
                     <li class="nav-item menu-item" role="presentation"><a href='../pages/usersPanel.php'
                                                                           class="nav-link">Użytkownicy </a></li>

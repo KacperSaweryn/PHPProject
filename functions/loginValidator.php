@@ -51,7 +51,7 @@ function checkCredentials()
 function echoLoginProblem()
 {
     echo "<script> alert('Niepoprawne dane')
-          location.href='/pages/login.php';
+          location.href='../pages/login.php';
           </script>";
     closeConnection();
     session_destroy();

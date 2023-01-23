@@ -1,9 +1,9 @@
 <?php
-function visitsList()
+function visitsList($id)
 {
     include("../CRUD/visits/get_visits.php");
 
-    $data = get_visits();
+    $data = get_visits($id);
 
     if (count($data)) {
         foreach ($data as $item) {

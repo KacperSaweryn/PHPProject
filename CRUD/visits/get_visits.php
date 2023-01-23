@@ -1,11 +1,12 @@
 <?php
-function get_visits(){
-include("C:/xampp/htdocs/Zajecia/PHPProject/CRUD/init.php");
+function get_visits($id){
+include("C:/xampp/htdocs/PHPProject/CRUD/init.php");
 $server = init();
 $sql = "SELECT wizyta.id, data_wizyty, czas_wizyty, lekarz.imie AS imie_lekarza, lekarz.nazwisko AS nazwisko_lekarza, pacjent.imie AS imie_pacjenta, pacjent.nazwisko AS nazwisko_pacjenta, opis
 FROM wizyta
 JOIN uzytkownik AS lekarz ON wizyta.lekarz_id = lekarz.uzytkownik_id
-JOIN uzytkownik AS pacjent ON wizyta.pacjent_id = pacjent.uzytkownik_id";
+JOIN uzytkownik AS pacjent ON wizyta.pacjent_id = pacjent.uzytkownik_id
+where pacjent.uzytkownik_id=$id";
 
 $res;
 if($server){
