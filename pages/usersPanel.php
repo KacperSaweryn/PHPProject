@@ -7,7 +7,8 @@ $userId = $_SESSION['userId'];
 function printUsers()
 {
     echo "
-            <h2>Lista użytkowników</h2>";
+    <div class='container'>
+    <h2>Lista użytkowników</h2>";
     global $connection;
     openConnection();
     $query = "select * from uzytkownik";
@@ -19,7 +20,7 @@ function printUsers()
                 <tr>");
     foreach ($headTitles as $headTitle) print("<th scope='col'>$headTitle</th>");
 
-    print("<th><b><input type='submit' name='button[-1]' class='btn btn-primary btn-block' value='Dodaj'
+    print("<th style='text-align: center'><b><input type='submit' name='button[-1]' class='btn btn-primary btn-block' value='Dodaj'
                                 /></th>");
     print("</tr>");
     echo "
@@ -41,7 +42,9 @@ function printUsers()
                     $type = $rowType['typ'];
                     print("<td>$type</td>");
                 } else if ($f == 5) {
-                    print("<td>***</td>");
+                    $x = "*";
+                    $strLen = str_repeat($x, strlen($field));
+                    print("<td>$strLen</td>");
                 } else {
                     print("<td>$field</td>");
                 }
@@ -55,7 +58,7 @@ function printUsers()
                       /></td>");
     }
     print("</table>");
-    print("</form>");
+    print("</form></div>");
     mysqli_free_result($result);
 
 }
@@ -82,40 +85,40 @@ function editUsers($nr = -1)
         $password = "";
     }
     echo " 
+    <br>
+    <div class='container'>
 	<form method=POST action=''> 
 	<table border=0>
 	<tr>
-	<label for='typeId'>Typ</label>
-    
+	<label for='typeId'><strong>Typ</strong></label>
     <select class='form-select' name='typeId'>
                                 <option selected value='1'>Admin</option>
                                 <option value='2'>Lekarz</option>
                                 <option value='3'>Pacjent</option>
     </select>
-   
 	</tr>
 	<tr>
-	<label for='name'>Imię</label>
-    <input type='text' value='$name' class='form-control' id='name' name='name' placeholder='Imię'>
+	<label for='name'><strong>Imię</strong></label>
+    <input type='text' value='$name' class='form-control' id='name' name='name' placeholder='Imię' required>
 	</tr>
 	<tr>
-	<label for='surname'>Nazwisko</label>
-    <input type='text' value='$surname' class='form-control' id='surname' name='surname' placeholder='Nazwisko'>
+	<label for='surname'><strong>Nazwisko</strong></label>
+    <input type='text' value='$surname' class='form-control' id='surname' name='surname' placeholder='Nazwisko' required>
 	</tr>
 	<tr>
-	<label for='login'>Login</label>
-    <input type='text' value='$login' class='form-control' id='login' name='login' placeholder='login'>
+	<label for='login'><strong>Login</strong></label>
+    <input type='text' value='$login' class='form-control' id='login' name='login' placeholder='Login' required>
 	</tr>
 	<tr>
 	<tr>
-	<label for='password'>Hasło</label>
-    <input type='text' value='$password' class='form-control' id='password' name='password' placeholder='Hasło'>
+	<label for='password'><strong>Hasło</strong></label>
+    <input type='password' value='$password' class='form-control' id='password' name='password' placeholder='Hasło' required>
 	</tr>
 	<tr>
 	<td colspan=3>
-	<input type=submit name='button[$nr]' value='Zapisz' style='width:200px'></td>
+	<input type=submit name='button[$nr]' class='btn btn-primary btn-block' value='Zapisz' style='width:200px'></td>
 	</tr>
-	</table></form>";
+	</table></form></div>";
 }
 
 function saveUser($nr)
@@ -154,6 +157,11 @@ function deleteUser($nr)
           integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <link href="../styles/styles.css" rel="stylesheet">
+    <script>
+        if ( window.history.replaceState ) {
+            window.history.replaceState( null, null, window.location.href );
+        }
+    </script>
 </head>
 
 <body>
@@ -204,8 +212,13 @@ switch ($orderValue) {
 printUsers();
 closeConnection();
 ?>
-<br>
-<br>
-<?= welcome($userId) ?>
+
 </body>
+<footer>
+    <div class="container">
+        <?php
+        welcome($userId);
+        ?>
+    </div>
+</footer>
 </html>

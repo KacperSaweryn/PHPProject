@@ -4,7 +4,7 @@ include('../components/visitsList.php');
 include('../functions/welcome.php');
 session_start();
 $userId = $_SESSION['userId'];
-
+openConnection();
 
 ?>
 <!DOCTYPE html>
@@ -19,6 +19,11 @@ $userId = $_SESSION['userId'];
           integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <link href="../styles/styles.css" rel="stylesheet">
+    <script>
+        if ( window.history.replaceState ) {
+            window.history.replaceState( null, null, window.location.href );
+        }
+    </script>
 </head>
 
 <body>
@@ -45,37 +50,43 @@ $userId = $_SESSION['userId'];
 <div class="tab-content" id="myTabContent">
 
     <!-- VISITS START -->
+    <div class="container">
+        <div class="tab-pane fade show active" id="visitsList" role="tabpanel" aria-labelledby="visits-tab"
+             tabindex="0">
 
-    <div class="tab-pane fade show active" id="visitsList" role="tabpanel" aria-labelledby="visits-tab"
-         tabindex="0">
+            <h2>Lista wizyt</h2>
 
-        <h2>Lista wizyt</h2>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">Data wizyty</th>
+                    <th scope="col">Czas wizyty</th>
+                    <th scope="col">Pacjent</th>
+                    <th scope="col">Lekarz</th>
+                    <th scope="col">Opis</th>
+                    <th scope="col"></th>
 
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th scope="col">Data wizyty</th>
-                <th scope="col">Czas wizyty</th>
-                <th scope="col">Pacjent</th>
-                <th scope="col">Lekarz</th>
-                <th scope="col">Opis</th>
-                <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                visitsList($userId);
+                ?>
+                </tbody>
+            </table>
 
-            </tr>
-            </thead>
-            <tbody>
-            <?php
-            visitsList($userId);
-            ?>
-            </tbody>
-        </table>
-
+        </div>
     </div>
     <!-- VISITS END -->
-<?php
-welcome($userId);
-closeConnection();
-?>
+    <?php
+    closeConnection();
+    ?>
 </body>
-
+<footer>
+    <div class="container">
+        <?php
+        welcome($userId);
+        ?>
+    </div>
+</footer>
 </html>

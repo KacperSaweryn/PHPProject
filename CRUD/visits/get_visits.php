@@ -6,7 +6,7 @@ $sql = "SELECT wizyta.id, data_wizyty, czas_wizyty, lekarz.imie AS imie_lekarza,
 FROM wizyta
 JOIN uzytkownik AS lekarz ON wizyta.lekarz_id = lekarz.uzytkownik_id
 JOIN uzytkownik AS pacjent ON wizyta.pacjent_id = pacjent.uzytkownik_id
-where pacjent.uzytkownik_id=$id";
+where pacjent.uzytkownik_id=$id order by data_wizyty, czas_wizyty";
 
 $res;
 if($server){

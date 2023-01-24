@@ -34,17 +34,13 @@
           <input type="password" name="password" id="form2Example2" class="form-control" required />
           <label class="form-label" for="form2Example2">Hasło</label>
         </div>
-      
-       
+
         <div class="row mb-4">
-          
-      
-        
+
         <button type="submit" class="btn btn-primary btn-block mb-4" >Zaloguj</button>
-      
-        
+
         <div class="text-center">
-          <p>Nie masz konta? <a href="#!">Zarejestruj się!</a></p>
+          <p>Nie masz konta? <a href="https://www.google.com/">Zarejestruj się!</a></p>
         </div>
       </form>
     </div>

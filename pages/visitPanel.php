@@ -8,11 +8,12 @@ $userId = $_SESSION['userId'];
 function printVisits()
 {
     echo "
-            <h2>Lista wizyt</h2>";
+    <div class='container'>
+    <h2>Lista wizyt</h2>";
     global $connection;
     openConnection();
 
-    $query = "select * from wizyta";
+    $query = "select * from wizyta order by data_wizyty, czas_wizyty";
     $result = mysqli_query($connection, $query);
     $headTitles = array("Data wizyty", "Godzina wizyty", "Lekarz", "Pacjent", "Opis");
     print("<form method='POST'>");
@@ -21,7 +22,7 @@ function printVisits()
                 <tr>");
     foreach ($headTitles as $headTitle) print("<th scope='col'>$headTitle</th>");
 
-    print("<th><b><input type='submit' name='button[-1]' class='btn btn-primary btn-block' value='Dodaj'
+    print("<th style='text-align: center'><b><input type='submit' name='button[-1]' class='btn btn-primary btn-block' value='Dodaj'
                                 /></th>");
     print("</tr>");
     echo "
@@ -72,7 +73,7 @@ function printVisits()
                       /></td>");
     }
     print("</table>");
-    print("</form>");
+    print("</form></div>");
     mysqli_free_result($result);
 
 }
@@ -103,10 +104,12 @@ function editVisit($nr = -1)
         $description = "";
     }
     echo " 
+    <br>
+    <div class='container'>
 	<form method=POST action=''> 
 	<table border=0>
 	<tr>
-	<label for='doctor'>Lekarz</label>
+	<label for='doctor'><strong>Lekarz</strong></label>
     <select class='form-select' name='doctorId'>";
      while($doctors = mysqli_fetch_array($doctorRecord)){
             echo"<option value='".$doctors['uzytkownik_id']."'>".$doctors['imie']." ".$doctors['nazwisko']."</option>";
@@ -114,31 +117,30 @@ function editVisit($nr = -1)
         echo"
 	</tr>
 	<tr>
-	<label for='patient'>Pacjent</label>
-   <select class='form-select' name='patientId'>";
+	<label for='patient'><strong>Pacjent</strong></label>
+    <select class='form-select' name='patientId'>";
     while($patients = mysqli_fetch_array($patientRecord)){
         echo"<option value='".$patients['uzytkownik_id']."'>".$patients['imie']." ".$patients['nazwisko']."</option>";
     }
     echo"
 	</tr>
 	<tr>
-	<label for='visitDate'>Data</label>
+	<label for='visitDate'><strong>Data</strong></label>
     <input type='date' value='$visitDate' class='form-control' id='visitDate' name='visitDate' placeholder='Data' required>
 	</tr>
 	<tr>
-	<label for='visitTime'>Godzina</label>
+	<label for='visitTime'><strong>Godzina</strong></label>
     <input type='time' value='$visitTime' class='form-control' id='visitTime' name='visitTime' placeholder='Godzina' required>
 	</tr>
 	<tr>
-	<tr>
-	<label for='opis'>Opis</label>
+	<label for='opis'><strong>Opis</strong></label>
     <input type='text' value='$description' class='form-control' id='opis' name='description' placeholder='Opis'>
 	</tr>
 	<tr>
 	<td colspan=3>
-	<input type=submit name='button[$nr]' value='Zapisz' style='width:200px'></td>
+	<input type=submit name='button[$nr]' class='btn btn-primary btn-block' value='Zapisz' style='width:200px'></td>
 	</tr>
-	</table></form>";
+	</table></form></div>";
 }
 
 function saveVisit($nr)
@@ -178,6 +180,11 @@ function deleteVisit($nr)
           integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <link href="../styles/styles.css" rel="stylesheet">
+    <script>
+        if ( window.history.replaceState ) {
+            window.history.replaceState( null, null, window.location.href );
+        }
+    </script>
 </head>
 
 <body>
@@ -233,9 +240,13 @@ switch ($orderValue) {
 printVisits();
 closeConnection();
 ?>
-<br>
-<br>
-<?= welcome($userId) ?>
-</body>
 
+</body>
+<footer>
+    <div class="container">
+        <?php
+        welcome($userId);
+        ?>
+    </div>
+</footer>
 </html>

@@ -8,6 +8,8 @@ $userId = $_SESSION['userId'];
 function printVisits()
 {
     echo "
+            
+            <div class='container'>
             <h2>Lista wizyt</h2>";
     global $connection;
     global $userId;
@@ -70,7 +72,7 @@ function printVisits()
                        </td>");
     }
     print("</table>");
-    print("</form>");
+    print("</form></div>");
     mysqli_free_result($result);
 
 }
@@ -85,17 +87,18 @@ function editVisit($nr)
     $description = $visit[0];
 
     echo " 
+ <div class='container'>
 	<form method=POST action=''> 
 	<table border=0>
-	
-	<label for='opis'>Opis</label>
-    <input type='text' value='$description' class='form-control' id='opis' name='description' placeholder='Opis' required>
+	<br>
+	<label for='opis'><strong>Opis</strong></label>
+    <input type='text' maxlength='250' value='$description' class='form-control' id='opis' name='description' placeholder='Opis' required>
 	</tr>
 	<tr>
 	<td colspan=3>
-	<input type=submit name='button[$nr]' value='Zapisz' style='width:200px'></td>
+	<input type=submit name='button[$nr]' value='Zapisz' class='btn btn-primary btn-block' style='width:200px'></td>
 	</tr>
-	</table></form>";
+	</table></form></div>";
 
 }
 
@@ -120,6 +123,11 @@ function saveVisit($nr)
           integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <link href="../styles/styles.css" rel="stylesheet">
+    <script>
+        if ( window.history.replaceState ) {
+            window.history.replaceState( null, null, window.location.href );
+        }
+    </script>
 </head>
 
 <body>
@@ -166,9 +174,13 @@ switch ($orderValue) {
 printVisits();
 closeConnection();
 ?>
-<br>
-<br>
-<?= welcome($userId) ?>
-</body>
 
+</body>
+<footer>
+    <div class="container">
+        <?php
+        welcome($userId);
+        ?>
+    </div>
+</footer>
 </html>

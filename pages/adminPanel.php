@@ -21,17 +21,19 @@ $userId = $_SESSION['userId'];
 </head>
 
 <body>
-   
+
 <section>
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
-        <div class="container d-flex justify-content-between">
+        <div class="container">
             <div class="navbar-brand">Przychodnia</div>
 
             <div id="ftco-nav">
                 <ul class="navbar-nav" id="myTab" role="tablist">
-                    <li class="nav-item menu-item" role="presentation"><a href='visitPanel.php' class="nav-link">Wizyty </a></li>
+                    <li class="nav-item menu-item" role="presentation"><a href='visitPanel.php'
+                                                                          class="nav-link">Wizyty </a></li>
                     </li>
-                    <li class="nav-item menu-item" role="presentation"><a href='../pages/usersPanel.php' class="nav-link">Użytkownicy </a></li>
+                    <li class="nav-item menu-item" role="presentation"><a href='../pages/usersPanel.php'
+                                                                          class="nav-link">Użytkownicy </a></li>
 
                     <li class="nav-item"><a href='../functions/logout.php' class="nav-link">Wyloguj się <i
                                     class="bi bi-box-arrow-right"></i></a></li>
@@ -46,8 +48,13 @@ $userId = $_SESSION['userId'];
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
         crossorigin="anonymous"></script>
-
-<?= welcome($userId) ?>
+<footer>
+    <div class="container">
+        <?php
+        welcome($userId);
+        ?>
+    </div>
+</footer>
 </body>
 
 </html>
