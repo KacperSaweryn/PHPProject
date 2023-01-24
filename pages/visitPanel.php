@@ -27,11 +27,10 @@ function printVisits()
                                 /></th>");
     print("</tr>");
     echo "
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                  ";
+    </tr>
+    </thead>
+    <tbody>
+    <tr>";
 
     while ($row = mysqli_fetch_row($result)) {
         print("<tr>");
