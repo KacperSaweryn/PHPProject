@@ -57,6 +57,7 @@ function echoLoginProblem()
     session_destroy();
     exit;
 }
+
 ?>
 
 <?php

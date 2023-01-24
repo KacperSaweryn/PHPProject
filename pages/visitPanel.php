@@ -111,18 +111,18 @@ function editVisit($nr = -1)
 	<tr>
 	<label for='doctor'><strong>Lekarz</strong></label>
     <select class='form-select' name='doctorId'>";
-     while($doctors = mysqli_fetch_array($doctorRecord)){
-            echo"<option value='".$doctors['uzytkownik_id']."'>".$doctors['imie']." ".$doctors['nazwisko']."</option>";
-        }
-        echo"
+    while ($doctors = mysqli_fetch_array($doctorRecord)) {
+        echo "<option value='" . $doctors['uzytkownik_id'] . "'>" . $doctors['imie'] . " " . $doctors['nazwisko'] . "</option>";
+    }
+    echo "
 	</tr>
 	<tr>
 	<label for='patient'><strong>Pacjent</strong></label>
     <select class='form-select' name='patientId'>";
-    while($patients = mysqli_fetch_array($patientRecord)){
-        echo"<option value='".$patients['uzytkownik_id']."'>".$patients['imie']." ".$patients['nazwisko']."</option>";
+    while ($patients = mysqli_fetch_array($patientRecord)) {
+        echo "<option value='" . $patients['uzytkownik_id'] . "'>" . $patients['imie'] . " " . $patients['nazwisko'] . "</option>";
     }
-    echo"
+    echo "
 	</tr>
 	<tr>
 	<label for='visitDate'><strong>Data</strong></label>
@@ -158,7 +158,6 @@ function saveVisit($nr)
     mysqli_query($connection, $order) or exit("Błąd w zapytaniu: " . $order);
 }
 
-
 function deleteVisit($nr)
 {
     global $connection;
@@ -181,8 +180,8 @@ function deleteVisit($nr)
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <link href="../styles/styles.css" rel="stylesheet">
     <script>
-        if ( window.history.replaceState ) {
-            window.history.replaceState( null, null, window.location.href );
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
         }
     </script>
 </head>
@@ -207,10 +206,7 @@ function deleteVisit($nr)
             </div>
         </div>
     </nav>
-
 </section>
-
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
         crossorigin="anonymous"></script>

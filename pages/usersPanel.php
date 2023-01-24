@@ -158,14 +158,13 @@ function deleteUser($nr)
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <link href="../styles/styles.css" rel="stylesheet">
     <script>
-        if ( window.history.replaceState ) {
-            window.history.replaceState( null, null, window.location.href );
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
         }
     </script>
 </head>
 
 <body>
-
 <section>
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
         <div class="container d-flex justify-content-between">
@@ -176,7 +175,6 @@ function deleteUser($nr)
                                                                           class="nav-link">Wizyty </a></li>
                     <li class="nav-item menu-item" role="presentation"><a href='../pages/usersPanel.php'
                                                                           class="nav-link">Użytkownicy </a></li>
-
                     </li>
                     <li class="nav-item"><a href='../functions/logout.php' class="nav-link">Wyloguj się <i
                                     class="bi bi-box-arrow-right"></i></a></li>
