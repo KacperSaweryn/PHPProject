@@ -4,7 +4,8 @@ include('../functions/welcome.php');
 include('../components/visitsList.php');
 session_start();
 $userId = $_SESSION['userId'];
-
+$lastVisit = $_COOKIE['lastVisit'] ?? "";
+setcookie('lastVisit', date('d/m/y - G:i'), time() + (60 * 60 * 12 * 365));
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -49,9 +50,15 @@ $userId = $_SESSION['userId'];
         integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
         crossorigin="anonymous"></script>
 <footer>
+
     <div class="container">
         <?php
         welcome($userId);
+        ?>
+    </div>
+    <div class="container">
+        <?php
+        getLastVisit($lastVisit);
         ?>
     </div>
 </footer>

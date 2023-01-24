@@ -89,5 +89,12 @@ function putTestData()
     foreach ($rozkazy as $rozkaz)
         mysqli_query($connection, $rozkaz) or exit("Błąd w zapytaniu: " . $rozkaz);
 }
-
+/**
+ * @param mixed $lastVisit
+ * @return void
+ */
+function getLastVisit(mixed $lastVisit): void
+{
+    echo "Ostatnia wizyta: " . $lastVisit;
+}
 ?>

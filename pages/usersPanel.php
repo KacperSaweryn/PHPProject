@@ -3,7 +3,8 @@ include('../functions/functions.php');
 include('../functions/welcome.php');
 session_start();
 $userId = $_SESSION['userId'];
-
+$lastVisit = $_COOKIE['lastVisit'] ?? "";
+setcookie('lastVisit', date('d/m/y - G:i'), time() + (60 * 60 * 12 * 365));
 function printUsers()
 {
     echo "
@@ -216,6 +217,11 @@ closeConnection();
     <div class="container">
         <?php
         welcome($userId);
+        ?>
+    </div>
+    <div class="container">
+        <?php
+        getLastVisit($lastVisit);
         ?>
     </div>
 </footer>
