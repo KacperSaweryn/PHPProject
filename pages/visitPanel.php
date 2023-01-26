@@ -242,10 +242,7 @@ closeConnection();
     <div class="container">
         <?php
         welcome($userId);
-        ?>
-    </div>
-    <div class="container">
-        <?php
+        echo " | ";
         getLastVisit($lastVisit);
         ?>
     </div>
